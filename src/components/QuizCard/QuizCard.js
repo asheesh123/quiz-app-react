@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
-import { operators } from "../../constants";
+import { getOperators, operators } from "../../constants";
 import classes from "./QuizCard.module.scss";
 
 const QuizCard = (props) => {
-  const { onAdd } = props;
+  const { onAdd, max } = props;
   const [answer, setAnswer] = useState("");
   const [a, setA] = useState();
   const [b, setB] = useState();
   const [operator, setOperator] = useState();
   const [counter, setCounter] = useState(0);
   const inputRef = useRef();
+
   const add = () => {
     return a + b;
   };
@@ -24,14 +25,14 @@ const QuizCard = (props) => {
   };
 
   useEffect(() => {
-    let a = Math.floor(Math.random() * 10 + 1);
+    let a = Math.floor(Math.random() * max + 1);
     setA(a);
-    let b = Math.floor(Math.random() * 10 + 1);
+    let b = Math.floor(Math.random() * max + 1);
     setB(b);
-    let operator = Math.floor(Math.random() * 10) % 4;
+    let operator = Math.floor(Math.random() * max) % getOperators().length;
     setOperator(operator);
     inputRef.current.focus();
-  }, [counter]);
+  }, [counter, max]);
 
   const check = () => {
     let result = 0;
@@ -70,6 +71,7 @@ const QuizCard = (props) => {
         value={answer}
         onChange={(e) => setAnswer(e.target.value)}
         ref={inputRef}
+        type={"number"}
       />
       <button className={classes.next} onClick={check}>
         Next
